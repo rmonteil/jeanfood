@@ -7,7 +7,7 @@ import db from "./config/db";
 import params from "./config/parameters";
 import Place from "./place";
 const place = new Place();
-const mattermost = new Mattermost("https://chat.allo-media.net/hooks/nice34je93nxxnwhfowa3gxzno");
+const mattermost = new Mattermost(params.global.incoming_webhook);
 
 import * as express from "express";
 import api from "./api";

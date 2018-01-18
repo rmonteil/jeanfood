@@ -13,4 +13,5 @@ export default {
         },
     },
     listening_port: 3000,
+    incoming_webhook: "url to your webhook"
 };
