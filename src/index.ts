@@ -7,7 +7,7 @@ import db from "./config/db";
 import params from "./config/parameters";
 import Place from "./place";
 const place = new Place();
-const mattermost = new Mattermost(params.global.incoming_webhook);
+const mattermost = new Mattermost(params.incoming_webhook);
 
 import * as express from "express";
 import api from "./api";
@@ -16,7 +16,7 @@ const app = express();
 app.use("/api", api);
 app.listen(params.listening_port, () => console.log("Server is listening on port 3000"));
 
-db.webhook.map((webhook) => {
+db.webhook.map((webhook: any) => {
     schedule.scheduleJob(webhook.cron, () => {
         place.getCoordinates(webhook.address)
             .then((coordinates) => {

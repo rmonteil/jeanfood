@@ -12,6 +12,6 @@ export default {
             apikey: "your api key",
         },
     },
+    incoming_webhook: "url to your webhook",
     listening_port: 3000,
-    incoming_webhook: "url to your webhook"
 };
