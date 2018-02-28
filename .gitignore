@@ -1,4 +1,4 @@
 node_modules
-dist
+public
 src/config/db.ts
 src/config/parameters.ts

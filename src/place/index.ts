@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
-import params from "./config/parameters";
-import { encodeData } from "./util";
+import params from "../config/parameters";
+import { encodeData } from "../util";
 
 export default class Place {
 

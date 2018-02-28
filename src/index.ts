@@ -1,44 +1,48 @@
-import logger from "./logger";
-const log = logger();
-import fetch from "node-fetch";
-import * as Mattermost from "node-mattermost";
-import * as schedule from "node-schedule";
-import db from "./config/db";
-import params from "./config/parameters";
-import Place from "./place";
-const place = new Place();
-const mattermost = new Mattermost(params.incoming_webhook);
+import * as debug from "debug";
+import * as http from "http";
+import App from "./App";
 
-import * as express from "express";
-import api from "./api";
-const app = express();
+debug("ts-express:server");
 
-app.use("/api", api);
-app.listen(params.listening_port, () => console.log("Server is listening on port 3000"));
+const normalizedPort = normalizePort(process.env.PORT || 3000);
+App.set("port", normalizedPort);
 
-db.webhook.map((webhook: any) => {
-    schedule.scheduleJob(webhook.cron, () => {
-        place.getCoordinates(webhook.address)
-            .then((coordinates) => {
-                place.getRestaurants(coordinates)
-                    .then((restaurants) => {
-                        const text = restaurants.map((restaurant: any) => {
-                            return `- ${restaurant.name} (${restaurant.rating}/5), ${restaurant.address}`;
-                        })
-                        .join("\n");
+const server = http.createServer(App);
+server.listen(normalizedPort);
+server.on("error", onError);
+server.on("listening", onListening);
 
-                        mattermost.send({
-                            channel: "#" + webhook.channel,
-                            icon_url: webhook.bot.icon_url,
-                            text: "Here are a few nearby restaurants:\n"
-                                + text
-                                + "\nTough decision, right? :wink:",
-                            username: webhook.bot.username,
-                        });
-                    });
-            })
-            .catch((err: Error) => {
-                console.error("An error happened:", err);
-            });
-    });
-});
+function normalizePort(val: number|string): number|string|boolean {
+  const port: number = (typeof val === "string") ? parseInt(val, 10) : val;
+  if (isNaN(port)) {
+      return val;
+  } else if (port >= 0) {
+      return port;
+  }
+  return false;
+}
+
+function onError(error: NodeJS.ErrnoException): void {
+  if (error.syscall !== "listen") {
+      throw error;
+  }
+  const bind = (typeof normalizedPort === "string") ? `Pipe ${normalizedPort}` : `Port ${normalizedPort}`;
+  switch (error.code) {
+    case "EACCES":
+      console.error(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(`${bind} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+function onListening(): void {
+  const addr = server.address();
+  const bind = (typeof addr === "string") ? `pipe ${addr}` : `port ${addr.port}`;
+  debug(`Listening on ${bind}`);
+}
