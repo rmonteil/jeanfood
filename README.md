@@ -1,4 +1,6 @@
 # jeanfood
+![tests result](https://circleci.com/gh/rmonteil/jeanfood/tree/master.png?style=shield&circle-token=921c888775c40bb6cbeb612938b6d3ccd117734a)
+
 Sends a scheduled notification on a Mattermost channel with a list of restaurants nearby.
 
 ## How to make it works?
