@@ -19,7 +19,13 @@ cp src/config/parameters.dist.ts src/config/parameters.ts
 vim src/config/parameters.ts # Put your own configuration parameters
 ```
 
-Lint (optionnal):
+And start the app:
+```bash
+npm run start
+```
+
+## Available commands
+Lint:
 ```bash
 npm run lint
 ```
@@ -34,3 +40,7 @@ Start:
 npm run start
 ```
 
+Watch:
+```bash
+npm run watch
+```

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w & nodemon ./public/index.js",
-    "start": "node ./public/index.js",
+    "start": "npm build && node ./public/index.js",
     "lint": "tslint -p ./tsconfig.json",
     "test": "echo \"no tests for now\""
   },
